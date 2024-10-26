@@ -18,6 +18,7 @@ RUN \
   fi
 
 
+# disable Vercel's data telemetry 
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
@@ -28,6 +29,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 
+# disable Vercel's data telemetry 
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
@@ -40,6 +42,7 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # add output: "standalone" to your next.config file
+# read more from: https://nextjs.org/docs/pages/api-reference/next-config-js/output
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
@@ -49,7 +52,5 @@ EXPOSE 3000
 
 ENV PORT=3000
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
